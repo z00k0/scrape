@@ -21,6 +21,7 @@ soup = BeautifulSoup(resp.content, 'lxml')
 with codecs.open('news.html', 'w', 'utf-8') as file:  # save news.html for debugging
     file.write(resp.text)
 
+
 news_dict = {}
 counter = 0
 for item in soup.findAll('div', 'post_item'):
@@ -46,6 +47,14 @@ for key, value in news_dict.items():
         code_list[number] = word
     except Exception as ex:
         print(ex)
-print(code_list)
+        number = 0
+
+with open('words.json', 'r', encoding='utf-8') as file:
+    words = json.load(file)
+
+for key, value in code_list:
+    if key not in words:
+        words[key] = word
+
 with open('words.json', 'w', encoding='utf-8') as file:
-    json.dump(code_list, file, ensure_ascii=False, indent=4)
+    json.dump(words, file, ensure_ascii=False, indent=4)
